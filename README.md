@@ -44,22 +44,18 @@ The Android Back button closes an open dialog first. At the main screen it check
 
 ## Updates and signing
 
-Package ID: `net.osamapro.mmexstudio`.
+The included GitHub workflow builds a test APK with an automatically generated Android debug signing key. No repository secrets or private signing kit are required. The key is cached for later builds; if the cache is removed or expires, a new key is generated and an existing installation may need to be removed before installing the new APK. Export your data before uninstalling.
 
-Current release: `2.29-android.2`, version code `22902`. It uses the same signing key as Android revision 1 and can update it in place.
+Download Diwan-Android-Test-APK from the successful run and extract app-debug.apk. This is a testing build, not a production signing setup. The package ID is unchanged.
 
-Keep the separate **private signing kit** backed up. Future builds must use the same key, package ID, and a higher version code to update this APK in place. The key is newly created for this Studio wrapper; it cannot update a different Android app signed with another key.
+## Build with GitHub Actions
 
-Never commit or upload the private signing kit to a public or private GitHub repository. The source ZIP contains no signing key or passwords.
+1. Upload the contents of this folder to your repository root, including .github and tools.
+2. Replace .github/workflows/build-apk.yml with the included workflow.
+3. Commit, or open Actions → Build Diwan test APK → Run workflow.
+4. Download Diwan-Android-Test-APK and extract app-debug.apk.
 
-## Build with GitHub — no Android Studio required
-
-1. Create a new GitHub repository and upload the **contents** of this source project. Keep `.github/workflows/build-apk.yml` in the repository root. GitHub must receive the `.github` folder and the bundled `gradle` folder too.
-2. In **Settings → Secrets and variables → Actions → New repository secret**, add the three values from the private signing kit's `GitHub-Secrets.txt`: `STUDIO_KEYSTORE_BASE64`, `STUDIO_STORE_PASSWORD`, and `STUDIO_KEY_PASSWORD`.
-3. Open **Actions → Build signed Android APK → Run workflow**.
-4. Download **Diwan-Android-APK** from the successful run and extract the APK.
-
-The workflow signs every build with your permanent key. Its version code is `23000 + github.run_number`. If you move to a fresh repository after many builds, increase the base so the next APK's version code exceeds the installed version. There is no separate Node build step: the HTML and JS are bundled assets.
+No signing secrets are needed. Java 17, SDK 35 and Gradle 8.11.1 are installed by the workflow. Local builds can use `gradle :app:assembleDebug` with the same tools installed.
 
 ## Build locally
 

@@ -1,8 +1,8 @@
 {
   "version_name": "0.1.0-android.1",
-  "build": "not yet built — run the GitHub workflow",
+  "build": "Revised unsigned release configuration and automatic debug signing workflow; APK compilation pending GitHub run",
   "previous_build": {
-    "build": "assembleRelease lintRelease — successful",
+    "build": "assembleRelease lintRelease \u2014 successful",
     "apk_signature": "v2 verified; same certificate as Android revision 1",
     "signing_certificate_sha256": "fbbcacd6241ef5bf7e2cae8920b87b1f10f18b3810c76085144dcdfd42a02f52",
     "version_code": 22902,
@@ -23,5 +23,6 @@
     "apk_assets_match_source": true,
     "physical_device_tested": false,
     "live_mmb_modified": false
-  }
+  },
+  "signing": "Automatic debug key, cached in GitHub Actions; no secrets required"
 }
