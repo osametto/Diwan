@@ -7,14 +7,14 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - uses: android-actions/setup-android@v4
       - name: Install Android SDK packages (API 35)
         run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
       - name: Verify Android adapter (mock provider)
@@ -25,9 +25,16 @@ jobs:
       - name: Restore permanent signing key
         env:
           KEYSTORE_BASE64: ${{ secrets.STUDIO_KEYSTORE_BASE64 }}
+          STORE_PW: ${{ secrets.STUDIO_STORE_PASSWORD }}
+          KEY_PW: ${{ secrets.STUDIO_KEY_PASSWORD }}
         run: |
-          test -n "$KEYSTORE_BASE64" || { echo 'Add the STUDIO signing secrets from your private signing kit.'; exit 1; }
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/studio-release.jks"
+          missing=""
+          test -n "$KEYSTORE_BASE64" || missing="$missing STUDIO_KEYSTORE_BASE64"
+          test -n "$STORE_PW" || missing="$missing STUDIO_STORE_PASSWORD"
+          test -n "$KEY_PW" || missing="$missing STUDIO_KEY_PASSWORD"
+          if [ -n "$missing" ]; then echo "::error::Missing repository secrets:$missing (Settings > Secrets and variables > Actions)"; exit 1; fi
+          printf '%s' "$KEYSTORE_BASE64" | tr -d ' \r\n' | base64 --decode > "$RUNNER_TEMP/studio-release.jks" || { echo "::error::STUDIO_KEYSTORE_BASE64 is not valid base64 — paste it again from GitHub-Secrets.txt"; exit 1; }
+          keytool -list -keystore "$RUNNER_TEMP/studio-release.jks" -storepass "$STORE_PW" >/dev/null || { echo "::error::Keystore and STUDIO_STORE_PASSWORD do not match"; exit 1; }
       - name: Compile and sign
         env:
           STUDIO_KEYSTORE: ${{ runner.temp }}/studio-release.jks
@@ -36,7 +43,7 @@ jobs:
           STUDIO_VERSION_CODE: ${{ github.run_number }}
         run: |
           export STUDIO_VERSION_CODE=$((23000 + STUDIO_VERSION_CODE))
-          gradle --no-daemon --max-workers=2 assembleRelease
+          gradle --no-daemon --max-workers=2 --stacktrace assembleRelease
       - uses: actions/upload-artifact@v4
         with:
           name: Diwan-Android-APK
