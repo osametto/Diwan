@@ -1,0 +1,27 @@
+{
+  "passed": 17,
+  "checks": [
+    "Selected folder is remembered and restored.",
+    "Folder permission checks use the granted tree URI.",
+    "UTF-8 companion bytes are preserved.",
+    "Writes remain buffered until close.",
+    "Close commits the exact payload.",
+    "Consecutive autosaves update the revision token.",
+    "300,000-byte binary data survives chunked read/write.",
+    "Native stale-revision errors propagate without hiding an external update.",
+    "Abort leaves original bytes unchanged.",
+    "Missing-file errors retain their DOMException name.",
+    "Detached Blob export survives immediate URL revocation.",
+    "Exports request a fresh target instead of overwriting an existing export.",
+    "MMB save locks editing, repeat Save, and Back until completion.",
+    "Back reports unsaved MMB or companion edits.",
+    "Pause flushes the existing companion queue without saving the MMB.",
+    "Report HTML is handed to native printing.",
+    "Read, commit, failure, and abort leave no pending transfer tokens."
+  ],
+  "limitations": [
+    "Node contract tests with a mock native provider.",
+    "Android SAF recovery, printing, UI layout, and physical-device behavior require device testing.",
+    "No financial database was modified."
+  ]
+}

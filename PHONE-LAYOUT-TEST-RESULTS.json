@@ -1,0 +1,25 @@
+{
+  "passed": 16,
+  "checks": [
+    "Transaction screen fits 320px viewport without page-level horizontal overflow.",
+    "Transaction screen fits 360px viewport without page-level horizontal overflow.",
+    "Transaction screen fits 412px viewport without page-level horizontal overflow.",
+    "Transaction screen fits 600px viewport without page-level horizontal overflow.",
+    "Transaction screen fits 740px viewport without page-level horizontal overflow.",
+    "Transaction rows are grouped under four date headings.",
+    "All five sample rows, including Arabic and long payee names, remain present.",
+    "Search/filter disclosure opens to reachable controls.",
+    "Budget shows one selected month without discarding other month data.",
+    "Month tabs switch the budget columns and summary together.",
+    "Budget screen fits 320px without page-level horizontal overflow.",
+    "Budget screen fits 360px without page-level horizontal overflow.",
+    "Budget screen fits 412px without page-level horizontal overflow.",
+    "Expense/Income/Transfer buttons update the original form type.",
+    "Transaction editor occupies the phone viewport.",
+    "No JavaScript errors during startup and tested phone interactions."
+  ],
+  "limitations": [
+    "Layout uses sample render fixtures, not a live MMB.",
+    "Chromium headless checks do not exercise Android SAF, physical keyboards, or device-specific WebView behavior."
+  ]
+}

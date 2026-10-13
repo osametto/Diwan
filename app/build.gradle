@@ -1,0 +1,31 @@
+plugins { id 'com.android.application' }
+
+android {
+    namespace 'net.osamapro.mmexstudio'
+    compileSdk 35
+    buildFeatures { buildConfig true }
+    defaultConfig {
+        applicationId 'net.osamapro.mmexstudio'
+        minSdk 26
+        targetSdk 35
+        versionCode = Integer.parseInt(System.getenv('STUDIO_VERSION_CODE') ?: '23001')
+        versionName '0.1.0-android.1'
+    }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('STUDIO_KEYSTORE') ?: '../signing/studio-release.jks')
+            storePassword System.getenv('STUDIO_STORE_PASSWORD')
+            keyAlias = System.getenv('STUDIO_KEY_ALIAS') ?: 'studio'
+            keyPassword System.getenv('STUDIO_KEY_PASSWORD')
+        }
+    }
+    buildTypes {
+        release { signingConfig signingConfigs.release; minifyEnabled false }
+    }
+    compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
+}
+
+dependencies {
+    implementation 'androidx.webkit:webkit:1.12.1'
+    implementation 'androidx.documentfile:documentfile:1.0.1'
+}

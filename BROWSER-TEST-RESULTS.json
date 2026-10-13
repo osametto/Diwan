@@ -1,0 +1,22 @@
+{
+  "passed": 13,
+  "checks": [
+    "Wrapped Studio starts at mobile viewport without JS errors.",
+    "Android exposes the direct-write Open action.",
+    "Folder permissions use the tree URI rather than its document URI.",
+    "Persisted folder restoration and UTF-8 companion read.",
+    "Writer buffers changes until close; reads do not overwrite files.",
+    "Close commits the exact prepared payload.",
+    "Chunked 300,000-byte binary write/read round trip.",
+    "Stale revision rejects overwrite of an external update.",
+    "Aborting a writer does not change the document.",
+    "Detached Blob export survives immediate object-URL revocation.",
+    "Print HTML reaches the native print hook.",
+    "MMB save blocks concurrent edits and duplicate Save actions until complete.",
+    "Folder reconnects after reloading the app."
+  ],
+  "limitations": [
+    "Mocked provider: Android SAF and physical-device behavior are not exercised.",
+    "No financial database is modified by this test."
+  ]
+}

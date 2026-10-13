@@ -1,0 +1,16 @@
+{
+  "source_file": "Diwan-0.1.0.html",
+  "source_sha256": "38e2cd457ad91a4faf243ca1496634554eefbfaf0a5bcf900d96f4240f970df4",
+  "android_hooks": [
+    "function folderStore(write=false,handle=null){return new Promise",
+    "const direct = typeof window.showOpenFilePicker === \"function\" && !mobile;",
+    "function printReport() { if (!reportRows.length&&!reportConfig.baseKind) return;",
+    "<button class=\"button secondary small\" onclick=\"mmex.openLinkedWindow()\">${uiIcon('window')}<span>Ne",
+    "window.mmex = {",
+    "if (!currentFileHandle) { downloadDatabase(); return; }",
+    "`Could not save in place: ${error.message}`, \"error\"); }"
+  ],
+  "financial_logic": "Unchanged",
+  "file_save": "Explicit Save button",
+  "companion_save": "Existing queued autosave to selected folder"
+}

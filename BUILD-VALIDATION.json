@@ -1,0 +1,27 @@
+{
+  "version_name": "0.1.0-android.1",
+  "build": "not yet built — run the GitHub workflow",
+  "previous_build": {
+    "build": "assembleRelease lintRelease — successful",
+    "apk_signature": "v2 verified; same certificate as Android revision 1",
+    "signing_certificate_sha256": "fbbcacd6241ef5bf7e2cae8920b87b1f10f18b3810c76085144dcdfd42a02f52",
+    "version_code": 22902,
+    "version_name": "2.29-android.2",
+    "package_id": "net.osamapro.mmexstudio",
+    "lint": "No issues found",
+    "file_adapter_checks": 17,
+    "browser_adapter_checks": 13,
+    "phone_layout_checks": 16,
+    "viewports_checked": [
+      320,
+      360,
+      412,
+      600,
+      740
+    ],
+    "apk_sha256": "271fe1d7bb3cb256325befe3707cb873de8f0a4fac616d75a880481028e4bc69",
+    "apk_assets_match_source": true,
+    "physical_device_tested": false,
+    "live_mmb_modified": false
+  }
+}
