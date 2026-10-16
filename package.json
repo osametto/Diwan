@@ -1,0 +1,14 @@
+{
+  "name": "diwan-android-mobile-source",
+  "private": true,
+  "version": "1.2.12-mobile.2",
+  "scripts": {
+    "test:bridge": "node tools/check_bridge_node.cjs",
+    "test:browser": "node tools/check_bridge.cjs",
+    "test:mobile": "node tools/mobile-ui-test.cjs",
+    "test": "npm run test:bridge && npm run test:browser && npm run test:mobile"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

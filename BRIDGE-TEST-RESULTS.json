@@ -1,5 +1,5 @@
 {
-  "passed": 17,
+  "passed": 18,
   "checks": [
     "Selected folder is remembered and restored.",
     "Folder permission checks use the granted tree URI.",
@@ -15,6 +15,7 @@
     "Exports request a fresh target instead of overwriting an existing export.",
     "MMB save locks editing, repeat Save, and Back until completion.",
     "Back reports unsaved MMB or companion edits.",
+    "Back detects unsaved source-editor changes through beforeunload.",
     "Pause flushes the existing companion queue without saving the MMB.",
     "Report HTML is handed to native printing.",
     "Read, commit, failure, and abort leave no pending transfer tokens."

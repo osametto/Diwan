@@ -68,15 +68,15 @@ async function dispatch(request) {
 async function main() {
   const server = http.createServer((req, res) => {
     const file = path.join(root, req.url === '/' ? 'index.html' : req.url.slice(1));
-    if (!file.startsWith(root + '/') || !fs.existsSync(file)) { res.writeHead(404).end(); return; }
-    res.setHeader('Content-Type', file.endsWith('.js') ? 'application/javascript' : 'text/html; charset=utf-8');
+    if (!file.startsWith(root + path.sep) || !fs.existsSync(file)) { res.writeHead(404).end(); return; }
+    res.setHeader('Content-Type', file.endsWith('.js') ? 'application/javascript' : file.endsWith('.css') ? 'text/css' : 'text/html; charset=utf-8');
     res.end(fs.readFileSync(file));
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   let browser;
   const checks = [], errors = [];
   try {
-    browser = await chromium.launch({headless: true, executablePath: process.env.CHROMIUM_EXECUTABLE || chromium.executablePath(), args: ['--no-sandbox','--no-zygote','--single-process','--in-process-gpu']});
+    browser = await chromium.launch({headless:true,channel:process.env.CHROMIUM_CHANNEL||'msedge'});
     const page = await browser.newPage({viewport: {width: 412, height: 915}, userAgent: 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/140.0.0.0 Mobile Safari/537.36'});
     page.on('pageerror', error => errors.push(error.message));
     await page.exposeFunction('mockNative', async raw => {
@@ -87,8 +87,8 @@ async function main() {
     await page.addInitScript(() => { window.StudioNative = {postMessage: raw => window.mockNative(raw).then(result => window.MMEXAndroid.receive(result))}; });
     await page.goto('http://127.0.0.1:' + server.address().port);
     await page.waitForFunction(() => window.mmex && document.getElementById('working-folder-button').textContent.includes('Finance'));
-    assert.equal(errors.length, 0, errors.join('; ')); checks.push('Wrapped Studio starts at mobile viewport without JS errors.');
-    assert.equal(await page.locator('#open-direct-button').isVisible(), true); checks.push('Android exposes the direct-write Open action.');
+    await page.waitForFunction(()=>window.mmex?.nativeVersion==='1.2.12' && window.DiwanNative); assert.equal(errors.length, 0, errors.join('; ')); checks.push('DIWAN 1.2.12 starts at mobile viewport without JS errors.');
+    await page.waitForFunction(()=>!!window.DiwanMobile); assert.equal(await page.locator('#m-content [data-action="open"]').isVisible(), true); checks.push('Android exposes the direct-write Open action.');
     assert.equal(await page.evaluate(async () => (await MMEXAndroid.restoreFolder()).queryPermission()), 'granted');
     checks.push('Folder permissions use the tree URI rather than its document URI.');
     const note = await page.evaluate(async () => {
@@ -131,6 +131,28 @@ async function main() {
     await page.reload(); await page.waitForFunction(() => window.mmex && document.getElementById('working-folder-button').textContent.includes('Finance'));
     checks.push('Folder reconnects after reloading the app.');
     assert.equal(errors.length, 0, errors.join('; '));
+    assert.equal(await page.locator('#file-input').getAttribute('accept'),'.diwan,.mmb');
+    const fixture=fs.readFileSync(path.join(__dirname,'fixture.sql'),'utf8');
+    await page.evaluate(async schema=>{
+      const SQL=await initSqlJs(); const db=new SQL.Database(); db.run(schema);
+      db.run("INSERT INTO INFOTABLE_V1 VALUES(1,'DATAVERSION','3'),(2,'BASECURRENCYID','1'); INSERT INTO CURRENCYFORMATS_V1(CURRENCYID,CURRENCYNAME,CURRENCY_SYMBOL,CURRENCY_TYPE,SCALE,BASECONVRATE) VALUES(1,'Test currency','USD','Fiat',100,1); INSERT INTO ACCOUNTLIST_V1(ACCOUNTID,ACCOUNTNAME,ACCOUNTTYPE,STATUS,FAVORITEACCT,CURRENCYID,INITIALBAL,INITIALDATE) VALUES(1,'Test account','Checking','Open','TRUE',1,100,'2026-01-01'); INSERT INTO PAYEE_V1(PAYEEID,PAYEENAME) VALUES(1,'Test payee'); INSERT INTO CHECKINGACCOUNT_V1(TRANSID,ACCOUNTID,PAYEEID,TRANSCODE,TRANSAMOUNT,TOTRANSAMOUNT,TRANSDATE) VALUES(1,1,1,'Deposit',25,25,'2026-01-02');");
+      window.fixtureMmb=db.export(); window.fixtureNative=DiwanNative.encode(SQL,db,{});db.close();
+      await mmex.openFiles([new File([fixtureMmb],'Test.mmb')]);
+    },fixture);
+    await page.waitForFunction(()=>mmex.getSession().fileName==='Test.mmb' && !!mmex.getSession().db);
+    assert.equal(await page.evaluate(()=>mmex.getSession().db.exec('SELECT TRANSAMOUNT FROM CHECKINGACCOUNT_V1')[0].values[0][0]),25);
+    checks.push('Android opens an MMB fixture with its account and transaction intact.');
+    await page.evaluate(()=>mmex.openFiles([new File([fixtureNative],'Test.diwan')]));
+    await page.waitForFunction(()=>mmex.getSession().fileName==='Test.diwan' && !!mmex.getSession().db);
+    assert.equal(await page.evaluate(()=>mmex.getSession().db.exec('SELECT TRANSAMOUNT FROM CHECKINGACCOUNT_V1')[0].values[0][0]),25);
+    checks.push('Android opens a native DIWAN fixture with matching transaction values.');
+    for(const extension of ['icd','qif','qdf','ofx','mny','db','sqlite']){
+      await page.evaluate(ext=>mmex.openFiles([new File(['unsupported'],'Test.'+ext)]),extension);
+      assert.equal(await page.evaluate(()=>mmex.getSession().fileName),'Test.diwan');
+      assert.equal(await page.locator('#diwan-icd,#diwan-qif-sheet,#diwan-qdf,#diwan-ofx,#diwan-mny').count(),0);
+    }
+    checks.push('Main picker accepts only .diwan/.mmb; other finance formats are rejected without replacing the open document.');
+    assert.equal(errors.length,0,errors.join('; '));
     const result = {passed: checks.length, checks, limitations: ['Mocked provider: Android SAF and physical-device behavior are not exercised.', 'No financial database is modified by this test.']};
     fs.writeFileSync(path.resolve(__dirname, '../BROWSER-TEST-RESULTS.json'), JSON.stringify(result, null, 2) + '\n');
     console.log(JSON.stringify(result, null, 2));

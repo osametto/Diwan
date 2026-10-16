@@ -1,0 +1,1 @@
+These are browser-rendered previews of the Android WebView interface using synthetic test data. They are not Android emulator or hardware screenshots. Reproduce them with tools/mobile-ui-test.cjs. No competitor screenshots or personal finance data are included.

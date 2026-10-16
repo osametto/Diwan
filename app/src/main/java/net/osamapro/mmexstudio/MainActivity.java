@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         for (File f : Objects.requireNonNull(getCacheDir().listFiles()))
             if (f.getName().startsWith("studio-transfer-")) f.delete();
         FrameLayout root = new FrameLayout(this);
-        root.setBackgroundColor(Color.rgb(75, 23, 102));
+        root.setBackgroundColor(Color.rgb(23, 63, 70));
         web = new WebView(this);
         root.addView(web, new FrameLayout.LayoutParams(-1, -1));
         root.setOnApplyWindowInsetsListener((view, insets) -> {
@@ -188,7 +188,7 @@ public class MainActivity extends Activity {
             case "pickFiles": {
                 String owner = a.getString("tree"); DocumentFile dir = tree(owner);
                 List<DocumentFile> choices = new ArrayList<>();
-                for (DocumentFile f : dir.listFiles()) if (f.isFile() && f.getName() != null && f.getName().toLowerCase(Locale.ROOT).matches(".*\\.(mmb|db|sqlite)$")) choices.add(f);
+                for (DocumentFile f : dir.listFiles()) if (f.isFile() && f.getName() != null && f.getName().toLowerCase(Locale.ROOT).matches(".*\\.(diwan|mmb)$")) choices.add(f);
                 choices.sort(Comparator.comparing(f -> f.getName().toLowerCase(Locale.ROOT)));
                 main.post(() -> pickFiles(id, owner, choices, true)); break;
             }
@@ -238,9 +238,9 @@ public class MainActivity extends Activity {
             }
             case "exportTarget": {
                 String owner = a.getString("tree"), name = a.getString("name"); validName(name);
-                DocumentFile root = tree(owner); DocumentFile dir = root.findFile("Diwan Exports");
-                if (dir == null) dir = root.createDirectory("Diwan Exports");
-                if (dir == null || !dir.isDirectory()) throw new IOException("Could not create Diwan Exports folder.");
+                DocumentFile root = tree(owner); DocumentFile dir = root.findFile("Studio Exports");
+                if (dir == null) dir = root.createDirectory("Studio Exports");
+                if (dir == null || !dir.isDirectory()) throw new IOException("Could not create Studio Exports folder.");
                 String candidate = name; int dot = name.lastIndexOf('.'); String stem = dot > 0 ? name.substring(0, dot) : name, ext = dot > 0 ? name.substring(dot) : "";
                 for (int i = 2; dir.findFile(candidate) != null; i++) candidate = stem + " (" + i + ")" + ext;
                 DocumentFile doc = dir.createFile(mime(candidate), candidate);
@@ -267,10 +267,10 @@ public class MainActivity extends Activity {
         catch (Exception e) { folderRequest = null; fail(id, e); }
     }
     private void pickFiles(String id, String owner, List<DocumentFile> choices, boolean multiple) {
-        if (choices.isEmpty()) { fail(id, new BridgeException("NotFoundError", "No finance files in this folder. Put the file and its companion file directly in the selected folder.")); return; }
+        if (choices.isEmpty()) { fail(id, new BridgeException("NotFoundError", "No .diwan or .mmb files in this folder. Put your document directly in the selected folder.")); return; }
         String[] names = choices.stream().map(DocumentFile::getName).toArray(String[]::new);
         boolean[] checked = new boolean[names.length];
-        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Open files — select up to 9")
+        AlertDialog dialog = new AlertDialog.Builder(this).setTitle("Open finance file — select up to 9")
             .setMultiChoiceItems(names, checked, (d, index, value) -> checked[index] = value)
             .setPositiveButton("Open", null)
             .setNegativeButton("Cancel", (d, w) -> fail(id, new BridgeException("AbortError", "File selection cancelled.")))
@@ -335,7 +335,7 @@ public class MainActivity extends Activity {
         }
     }
     private JSONObject commit(Transfer t) throws Exception {
-        if (!t.revision.equals(hashDocument(t.document))) throw new BridgeException("InvalidStateError", "File changed outside Diwan. Export a copy of your edits, then reopen the file or companion.");
+        if (!t.revision.equals(hashDocument(t.document))) throw new BridgeException("InvalidStateError", "File changed outside Studio. Export a copy of your edits, then reopen the document or companion.");
         // The provider has no universal atomic replace API. Preserve and verify the original first.
         File original = File.createTempFile("studio-transfer-", ".previous", getCacheDir());
         try {
@@ -358,8 +358,8 @@ public class MainActivity extends Activity {
                 if (!revision.equals(hashDocument(t.document))) throw new IOException("Saved bytes did not match the prepared file.");
             } catch (Exception e) {
                 try { writeDocument(t.document, original); if (!t.revision.equals(hashDocument(t.document))) throw new IOException("Recovery verification failed."); }
-                catch (Exception recovery) { throw new IOException("Save failed and recovery failed. Restore .studio-backups/" + t.document.getName() + ".previous. Your edits remain open in Diwan.", e); }
-                throw new IOException("Save failed; the original file was restored. Your edits remain open in Diwan.", e);
+                catch (Exception recovery) { throw new IOException("Save failed and recovery failed. Restore .studio-backups/" + t.document.getName() + ".previous. Your edits remain open in Studio.", e); }
+                throw new IOException("Save failed; the original file was restored. Your edits remain open in Studio.", e);
             }
             return new JSONObject().put("revision", revision);
         } finally { original.delete(); }
@@ -372,7 +372,7 @@ public class MainActivity extends Activity {
             @Override public void onPageFinished(WebView view, String url) {
                 if (started) return; started = true;
                 PrintManager printer = (PrintManager)getSystemService(PRINT_SERVICE);
-                printer.print("Diwan report", view.createPrintDocumentAdapter("Diwan report"), new PrintAttributes.Builder().build());
+                printer.print("DIWAN report", view.createPrintDocumentAdapter("DIWAN report"), new PrintAttributes.Builder().build());
             }
         });
         printView.loadDataWithBaseURL(ORIGIN + "/assets/", html, "text/html", "UTF-8", null);
@@ -382,8 +382,8 @@ public class MainActivity extends Activity {
             if ("\"handled\"".equals(result)) return;
             if ("\"busy\"".equals(result)) { Toast.makeText(this, "Wait for the file operation to finish.", Toast.LENGTH_SHORT).show(); return; }
             boolean dirty = "\"dirty\"".equals(result);
-            new AlertDialog.Builder(this).setTitle(dirty ? "Unsaved changes" : "Close Diwan?")
-                .setMessage(dirty ? "File changes are not saved. Return and press Save, or exit and discard them. Preferences may already have autosaved." : "Close the app?")
+            new AlertDialog.Builder(this).setTitle(dirty ? "Unsaved changes" : "Close DIWAN?")
+                .setMessage(dirty ? "Document changes are not saved. Return and save, or exit and discard them. Preferences may already have autosaved." : "Close the app?")
                 .setNegativeButton("Stay", null).setPositiveButton(dirty ? "Discard and exit" : "Exit", (d, w) -> finish()).show();
         });
     }

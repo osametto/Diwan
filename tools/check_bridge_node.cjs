@@ -78,6 +78,7 @@ const session = {dirtyCount: 0, archives: [], companionState: {pending: 0, unsav
 const context = {console, Blob, File, URL: class extends URL {}, DOMException, Uint8Array, Map, WeakSet, Promise, String, JSON,
   atob, btoa, Event, document, HTMLAnchorElement: Anchor};
 context.window = context;
+let previewDirty=false; context.dispatchEvent=event=>{if(previewDirty)event.preventDefault(); return !event.defaultPrevented;};
 context.mmex = {getSession: () => session, flushCompanion: async () => { flushes++; }};
 context.StudioNative = {postMessage(raw) {
   const request = JSON.parse(raw);
@@ -127,6 +128,7 @@ async function main() {
   session.dirtyCount = 1; assert.equal(api.backState(), 'dirty'); session.dirtyCount = 0;
   session.companionState.unsaved = true; assert.equal(api.backState(), 'dirty'); session.companionState.unsaved = false;
   done('Back reports unsaved MMB or companion edits.');
+  previewDirty=true; assert.equal(api.backState(),'dirty'); previewDirty=false; assert.equal(api.backState(),'exit'); done('Back detects unsaved source-editor changes through beforeunload.');
   api.flushOnPause(); await wait(); assert.equal(flushes, 1); done('Pause flushes the existing companion queue without saving the MMB.');
   await api.printHtml('<html>report</html>'); assert.equal(printHtml, '<html>report</html>'); done('Report HTML is handed to native printing.');
   assert.equal(transfers.size, 0); done('Read, commit, failure, and abort leave no pending transfer tokens.');

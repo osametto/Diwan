@@ -99,7 +99,7 @@
       const cover = document.createElement('div');
       cover.id = 'android-save-cover'; cover.setAttribute('role', 'status'); cover.setAttribute('aria-live', 'polite');
       cover.style.cssText = 'position:fixed;inset:0;z-index:2147483647;background:rgba(25,15,35,.8);display:grid;place-content:center;color:#fff;font:600 18px sans-serif;text-align:center;padding:24px;';
-      cover.textContent = 'Saving… Please wait.';
+      cover.textContent = 'Saving document… Please wait.';
       document.body.append(cover);
       document.activeElement?.blur();
       return true;
@@ -108,13 +108,16 @@
     backState() {
       if (savingDatabase) return 'busy';
       const dialog = document.querySelector('dialog[open]');
-      if (dialog) { dialog.dispatchEvent(new Event('cancel', {cancelable: true})); dialog.close(); return 'handled'; }
-      if (window.MMEXPhone?.handleBack()) return 'handled';
+      if (dialog) { const cancel = new Event('cancel', {cancelable: true}); if(dialog.dispatchEvent(cancel)) dialog.close(); return 'handled'; }
+      if (window.DiwanMobile?.back()) return 'handled';
       const nav = document.getElementById('mobile-more-dialog');
       if (nav && !nav.classList.contains('hidden')) { nav.classList.add('hidden'); return 'handled'; }
       const session = window.mmex?.getSession();
       if (exportsPending || pending.size || session?.companionState?.pending) return 'busy';
       if (session?.dirtyCount || session?.archives?.some(a => a.dirty) || session?.companionState?.unsaved) return 'dirty';
+      const before = new Event('beforeunload', {cancelable:true});
+      window.dispatchEvent(before);
+      if(before.defaultPrevented) return 'dirty';
       return 'exit';
     },
     flushOnPause() { window.mmex?.flushCompanion?.().catch(error => console.error(error)); },
@@ -125,7 +128,7 @@
         const target = fromDescription(await call('exportTarget', {tree: activeFolder.tree, name}));
         const writer = await target.createWritable();
         await writer.write(blob); await writer.close();
-        await call('notify', {message: 'Saved to Diwan Exports/' + target.name});
+        await call('notify', {message: 'Saved to Studio Exports/' + target.name});
       } catch (error) {
         await call('notify', {message: 'Export failed: ' + error.message});
         console.error(error);

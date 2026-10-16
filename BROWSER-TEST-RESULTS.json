@@ -1,7 +1,7 @@
 {
-  "passed": 13,
+  "passed": 16,
   "checks": [
-    "Wrapped Studio starts at mobile viewport without JS errors.",
+    "DIWAN 1.2.12 starts at mobile viewport without JS errors.",
     "Android exposes the direct-write Open action.",
     "Folder permissions use the tree URI rather than its document URI.",
     "Persisted folder restoration and UTF-8 companion read.",
@@ -13,7 +13,10 @@
     "Detached Blob export survives immediate object-URL revocation.",
     "Print HTML reaches the native print hook.",
     "MMB save blocks concurrent edits and duplicate Save actions until complete.",
-    "Folder reconnects after reloading the app."
+    "Folder reconnects after reloading the app.",
+    "Android opens an MMB fixture with its account and transaction intact.",
+    "Android opens a native DIWAN fixture with matching transaction values.",
+    "Main picker accepts only .diwan/.mmb; other finance formats are rejected without replacing the open document."
   ],
   "limitations": [
     "Mocked provider: Android SAF and physical-device behavior are not exercised.",

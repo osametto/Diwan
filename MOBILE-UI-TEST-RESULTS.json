@@ -1,0 +1,26 @@
+{
+  "passed": 15,
+  "checks": [
+    "Independent phone welcome and direct file action.",
+    "Transaction-first launch, date grouping, Arabic text and explicit currency amounts.",
+    "Balances include both sides of transfers, preserve account currencies and exclude future transactions.",
+    "Account tap opens its register including incoming transfers.",
+    "Transfer detail shows source and destination accounts and the distinct received amount.",
+    "Search and transaction-type filters operate on engine query results.",
+    "Quick entry saves through the original validation/write path, refreshes balances, and shows unsaved-file state.",
+    "Cancelling draft discard keeps the full-screen editor and its values open.",
+    "Single-month envelope view edits allocations through the original budget engine and reports positive spending with proportional progress.",
+    "Overview recent activity excludes future-dated transactions.",
+    "File, save and app-bar touch targets meet the 48 CSS pixel floor.",
+    "Secondary tools retain their real engine functions and return to mobile navigation.",
+    "Loaded transaction screen fits compact phones, dark mode, enlarged text and a tablet navigation rail.",
+    "Restart returns to the mobile file-opening screen.",
+    "Light/dark, 320px phones, enlarged text and tablet welcome have no horizontal overflow."
+  ],
+  "errors": [],
+  "captures": "D:\\ACTUAL Source Code\\diwan-mobile-redesign\\Source\\.impeccable\\review",
+  "limitations": [
+    "Browser-rendered Android WebView UI, not emulator or physical-device screenshots.",
+    "Synthetic fixtures only. Native Android storage providers and IME need device testing."
+  ]
+}

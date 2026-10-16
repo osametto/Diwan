@@ -8,11 +8,19 @@ android {
         applicationId 'net.osamapro.mmexstudio'
         minSdk 26
         targetSdk 35
-        versionCode = Integer.parseInt(System.getenv('STUDIO_VERSION_CODE') ?: '23001')
-        versionName '0.1.0-android.1'
+        versionCode = Integer.parseInt(System.getenv('STUDIO_VERSION_CODE') ?: '120200')
+        versionName '1.2.12-mobile.2'
+    }
+    signingConfigs {
+        release {
+            storeFile file(System.getenv('STUDIO_KEYSTORE') ?: '../signing/studio-release.jks')
+            storePassword System.getenv('STUDIO_STORE_PASSWORD')
+            keyAlias = System.getenv('STUDIO_KEY_ALIAS') ?: 'studio'
+            keyPassword System.getenv('STUDIO_KEY_PASSWORD')
+        }
     }
     buildTypes {
-        release { minifyEnabled false }
+        release { signingConfig signingConfigs.release; minifyEnabled false }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
 }
