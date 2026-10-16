@@ -20,6 +20,7 @@ android {
         }
     }
     buildTypes {
+        debug { applicationIdSuffix ".preview"; versionNameSuffix "-debug" }
         release { signingConfig signingConfigs.release; minifyEnabled false }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }

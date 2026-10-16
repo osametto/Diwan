@@ -18,14 +18,12 @@ Android opens **.diwan and .mmb only**. Open one native DIWAN file, or up to nin
 ## Build on GitHub from another computer
 
 1. Extract this ZIP and upload the **contents** of `DIWAN-Android-Mobile-1.2.12` into a GitHub repository. Include `.github` and `gradle`. `build.gradle` and `package.json` must be at the repository root.
-2. Keep the separate private signing kit backed up. Never upload the kit, `.jks`, `signing.env`, or `GitHub-Secrets.txt` to a repository.
-3. In repository **Settings > Secrets and variables > Actions**, create `STUDIO_KEYSTORE_BASE64`, `STUDIO_STORE_PASSWORD`, and `STUDIO_KEY_PASSWORD` from the existing signing kit's `GitHub-Secrets.txt`.
-4. In **Actions > Build signed Android APK**, choose **Run workflow**. The workflow also runs on pushes to `main`.
-5. Download the **DIWAN-Android-APK** artifact from the successful run and extract `app-release.apk`.
+2. No repository secrets are required. In **Actions > Build Android preview APK**, select **Run workflow** (also runs on pushes to main).
+3. Download **DIWAN-Android-Debug-APK** and extract `app-debug.apk`.
 
-The workflow regenerates the embedded assets, runs the Node and Chromium regression checks, compiles, signs and runs Android release lint. It restores the key only in the runner's temporary directory and removes it after the job. This task has not uploaded a repository or executed GitHub Actions.
+Preview package ID is `net.osamapro.mmexstudio.preview`, so it can coexist with the signed production app. GitHub generates a temporary debug signing key; previews from different runs may require uninstalling the prior preview. Export/save your finance files first. This is a test build, not a permanent release signing arrangement. Existing production app data is not migrated automatically.
 
-Package ID stays `net.osamapro.mmexstudio`; version name is `1.2.12-mobile.2`. Local version-code base is **120200**; GitHub adds the workflow run number. Keep version codes increasing in later releases. Using the original signing key permits updating the prior DIWAN/MMEX Studio app without uninstalling it. Minimum Android API 26 (Android 8), target/compile API 35. Keep Android System WebView updated.
+Release signing remains available locally using the original private kit; never commit it. Android minimum API 26, compile/target API 35. This task delivers source only and does not upload or run GitHub Actions.
 
 ## Local development
 
@@ -60,3 +58,13 @@ The HTML preparation must be rerun after changing `mobile-core.js`; CSS and shel
 Document edits stay in memory until Save file. Preferences use the original queued autosave. Existing `Studio Exports` and `.studio-backups/<filename>.previous` paths are preserved for compatibility. Native writes detect external changes, preserve previous bytes and verify the write; Android providers cannot universally guarantee atomic replacement during power loss. The file bridge retains its 256 MiB transfer limit and memory constraints.
 
 Verification reports cover source compilation, release lint, 18 Node bridge checks, 16 browser bridge/opening checks and 15 mobile workflow checks. `previews/` contains browser-rendered UI using labeled synthetic test data, not emulator/device captures. Native storage providers, IME, Android system Back/predictive gestures, printing, system font scaling and hardware performance still require testing on an Android device. The independent reviewer resolved its two findings (future Recent activity and undersized file/search hit areas) and cleared the source handoff at this browser-evidence scope.
+
+## GitHub troubleshooting
+
+The default GitHub workflow builds a debug preview without secrets. Permanent release signing is optional and separate.
+
+The 1.2.12 engine HTML is a supplied source input, not produced by an npm build script. If that original input is absent from GitHub but the prepared Android assets are committed, the workflow tests and builds those assets directly. Regenerating them after changes to `tools/mobile-core.js` still requires the original HTML. Upload the complete source ZIP contents for a fully reproducible checkout.
+
+## Visual identity
+
+Uses the supplied Diwan Ledger v2 outlined logos, petrol/ivory palette, copper detail, semantic finance colors and Android adaptive/monochrome launcher icons. Original branding guide and font notice are in `brand/`. The independent mobile navigation and quick-entry workflow are retained.

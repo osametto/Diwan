@@ -83,4 +83,10 @@ def wrap(source):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('studio_html', type=Path)
-    wrap(parser.parse_args().studio_html)
+    args = parser.parse_args()
+    source = args.studio_html
+    if not source.is_file() and not source.is_absolute():
+        source = ROOT / source
+    if not source.is_file():
+        parser.error(f"Missing engine input: {args.studio_html}. Restore Diwan-1.2.12.html from the complete source ZIP. The GitHub workflow can also test/build the committed prepared app/src/main/assets without regenerating it.")
+    wrap(source)

@@ -2,36 +2,36 @@
 name: DIWAN Android
 description: Everyday pocket ledger for Android WebView
 colors:
-  primary: "#215bd4"
+  primary: "#173f46"
   on-primary: "#fff"
-  primary-container: "#e5edff"
-  bg: "#f7f8fc"
+  primary-container: "#e2ebe8"
+  bg: "#f5f2ea"
   surface: "#fff"
-  raised: "#eef2fa"
-  text: "#19253c"
-  muted: "#59657b"
-  line: "#dce2ec"
-  income: "#08765c"
-  income-bg: "#e2f4ee"
-  expense: "#b82348"
-  expense-bg: "#fce8ee"
-  transfer: "#265db3"
-  transfer-bg: "#e6edff"
-  dark-primary: "#aec8ff"
-  dark-on-primary: "#122e64"
-  dark-primary-container: "#253b60"
-  dark-bg: "#101722"
-  dark-surface: "#172132"
-  dark-raised: "#202c40"
-  dark-text: "#ecf0f8"
-  dark-muted: "#b4bfd2"
-  dark-line: "#354258"
-  dark-income: "#89dfbe"
-  dark-income-bg: "#163d35"
-  dark-expense: "#ffb0c5"
-  dark-expense-bg: "#4b2536"
-  dark-transfer: "#abc7ff"
-  dark-transfer-bg: "#253c61"
+  raised: "#ebe9e1"
+  text: "#252b2d"
+  muted: "#586260"
+  line: "#daddd8"
+  income: "#20734b"
+  income-bg: "#e4f1e9"
+  expense: "#b83a3a"
+  expense-bg: "#fbe9e6"
+  transfer: "#8a630d"
+  transfer-bg: "#f5edd8"
+  dark-primary: "#c0d9d8"
+  dark-on-primary: "#102b30"
+  dark-primary-container: "#284b50"
+  dark-bg: "#102b30"
+  dark-surface: "#173f46"
+  dark-raised: "#244a50"
+  dark-text: "#f5f2ea"
+  dark-muted: "#bbc9c7"
+  dark-line: "#3a5960"
+  dark-income: "#74d4a4"
+  dark-income-bg: "#194b3b"
+  dark-expense: "#ff9a9a"
+  dark-expense-bg: "#593437"
+  dark-transfer: "#e8c36d"
+  dark-transfer-bg: "#4b4227"
 typography:
   headline:
     fontFamily: 'Roboto, "Noto Sans Arabic", system-ui, sans-serif'
@@ -171,3 +171,7 @@ The .impeccable/review captures are browser-only synthetic evidence. The reporte
 - Don't transplant the desktop sidebar or Actual Budget repository styling.
 - Don't rely on color alone to explain transaction direction.
 - Don't represent browser synthetic captures as Android device evidence.
+
+## Approved identity v2
+
+Diwan Ledger supplied outlined marks, petrol #173F46, ivory #F5F2EA, copper #B9814B, charcoal #252B2D and semantic finance colors replace the blue theme. Native adaptive, monochrome and legacy launcher resources come directly from the approved v2 package. See brand/BRAND-GUIDE.md.

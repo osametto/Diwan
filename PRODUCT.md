@@ -20,7 +20,7 @@ The user requested a mobile approach and design substantially different from web
 
 ## Delivery constraints
 
-Generate GitHub-ready source only in `C:\Users\OsamaPremium\OneDrive\MMEX\DIWAN APK`. Include a GitHub Actions signing/build workflow. Keep the existing package ID and signing identity for future in-place updates. Never include signing credentials in the source archive. Do not generate or publish a new APK for this redesign request.
+Generate GitHub-ready source only in `C:\Users\OsamaPremium\OneDrive\MMEX\DIWAN APK`. Include a GitHub Actions signing/build workflow. Release retains its package and signing identity. GitHub defaults to a secret-free debug preview with .preview application ID suffix. Never include signing credentials in the source archive. Do not generate or publish a new APK for this redesign request.
 
 ## Accessibility
 

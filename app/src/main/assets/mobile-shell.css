@@ -1,28 +1,28 @@
 /* Android presentation: compact ledger, independent app navigation, full-screen entry. */
 html.diwan-mobile {
-  --m-primary:#215bd4; --m-on-primary:#fff; --m-primary-container:#e5edff;
-  --m-bg:#f7f8fc; --m-surface:#fff; --m-raised:#eef2fa; --m-text:#19253c;
-  --m-muted:#59657b; --m-line:#dce2ec; --m-income:#08765c; --m-income-bg:#e2f4ee;
-  --m-expense:#b82348; --m-expense-bg:#fce8ee; --m-transfer:#265db3; --m-transfer-bg:#e6edff;
+  --m-primary:#173f46; --m-on-primary:#fff; --m-primary-container:#e2ebe8;
+  --m-bg:#f5f2ea; --m-surface:#fff; --m-raised:#ebe9e1; --m-text:#252b2d;
+  --m-muted:#586260; --m-line:#daddd8; --m-income:#20734b; --m-income-bg:#e4f1e9;
+  --m-expense:#b83a3a; --m-expense-bg:#fbe9e6; --m-transfer:#8a630d; --m-transfer-bg:#f5edd8;
   --m-radius:16px; --m-nav-height:76px; --m-header-height:76px;
   --ui-brand:var(--m-primary); --ui-canvas:var(--m-bg); --ui-surface:var(--m-surface);
   --ui-text:var(--m-text); --ui-muted:var(--m-muted); --ui-border:var(--m-line);
-  --ui-border-strong:var(--m-muted); --ui-focus:var(--m-primary);
+  --ui-border-strong:var(--m-muted); --ui-focus:#0077b6;
   color-scheme:light;
 }
 html.diwan-mobile[data-mobile-theme="dark"] {
-  --m-primary:#aec8ff; --m-on-primary:#122e64; --m-primary-container:#253b60;
-  --m-bg:#101722; --m-surface:#172132; --m-raised:#202c40; --m-text:#ecf0f8;
-  --m-muted:#b4bfd2; --m-line:#354258; --m-income:#89dfbe; --m-income-bg:#163d35;
-  --m-expense:#ffb0c5; --m-expense-bg:#4b2536; --m-transfer:#abc7ff; --m-transfer-bg:#253c61;
+  --m-primary:#c0d9d8; --m-on-primary:#102b30; --m-primary-container:#284b50;
+  --m-bg:#102b30; --m-surface:#173f46; --m-raised:#244a50; --m-text:#f5f2ea;
+  --m-muted:#bbc9c7; --m-line:#3a5960; --m-income:#74d4a4; --m-income-bg:#194b3b;
+  --m-expense:#ff9a9a; --m-expense-bg:#593437; --m-transfer:#e8c36d; --m-transfer-bg:#4b4227;
   color-scheme:dark;
 }
 @media(prefers-color-scheme:dark) {
   html.diwan-mobile[data-mobile-theme="system"] {
-    --m-primary:#aec8ff; --m-on-primary:#122e64; --m-primary-container:#253b60;
-    --m-bg:#101722; --m-surface:#172132; --m-raised:#202c40; --m-text:#ecf0f8;
-    --m-muted:#b4bfd2; --m-line:#354258; --m-income:#89dfbe; --m-income-bg:#163d35;
-    --m-expense:#ffb0c5; --m-expense-bg:#4b2536; --m-transfer:#abc7ff; --m-transfer-bg:#253c61;
+    --m-primary:#c0d9d8; --m-on-primary:#102b30; --m-primary-container:#284b50;
+    --m-bg:#102b30; --m-surface:#173f46; --m-raised:#244a50; --m-text:#f5f2ea;
+    --m-muted:#bbc9c7; --m-line:#3a5960; --m-income:#74d4a4; --m-income-bg:#194b3b;
+    --m-expense:#ff9a9a; --m-expense-bg:#593437; --m-transfer:#e8c36d; --m-transfer-bg:#4b4227;
     color-scheme:dark;
   }
 }
@@ -32,7 +32,7 @@ html.diwan-mobile[data-mobile-theme="dark"] {
 .diwan-mobile #app,.diwan-mobile body>.topbar,.diwan-mobile body>.app-footer,.diwan-mobile #welcome-view,.diwan-mobile #workspace,.diwan-mobile #mobile-nav,.diwan-mobile .command-strip,.diwan-mobile #mobile-more-dialog { display:none!important; }
 .diwan-mobile button,.diwan-mobile input,.diwan-mobile select,.diwan-mobile textarea { font:inherit; }
 .diwan-mobile button { cursor:pointer; -webkit-tap-highlight-color:transparent; touch-action:manipulation; }
-.diwan-mobile :focus-visible { outline:3px solid var(--m-primary); outline-offset:3px; }
+.diwan-mobile :focus-visible { outline:3px solid var(--ui-focus); outline-offset:3px; }
 .diwan-mobile ::selection { background:var(--m-primary-container); color:var(--m-text); }
 .diwan-mobile input,.diwan-mobile textarea { caret-color:var(--m-primary); }
 .diwan-mobile ::placeholder { color:var(--m-muted); opacity:1; }
@@ -308,3 +308,14 @@ html.diwan-mobile[data-mobile-theme="dark"] {
 .diwan-mobile #transaction-dialog .modal-footer>.button:not([type=submit]) { flex:0 0 auto; }
 .diwan-mobile #transaction-dialog .modal-footer>.button[type=submit] { flex:1 1 auto; white-space:nowrap; }
 #m-entry-currency { font-size:.875rem; color:var(--m-muted); font-weight:600; }
+
+/* Approved Diwan Ledger v2 artwork: retain original paths and proportions. */
+.m-monogram { background:transparent; border-radius:0; padding:6px; }
+.m-brand-symbol { display:block; width:32px; height:32px; object-fit:contain; }
+.m-brand-dark { display:none; }
+.m-brand-lockup { display:block; width:180px; max-width:100%; height:auto; margin:0 auto; }
+.m-welcome-brand { border-bottom:1px solid #b9814b; padding-bottom:24px; }
+html[data-mobile-theme="dark"] .m-brand-light { display:none; }
+html[data-mobile-theme="dark"] .m-brand-dark { display:block; }
+@media(prefers-color-scheme:dark) { html[data-mobile-theme="system"] .m-brand-light { display:none; } html[data-mobile-theme="system"] .m-brand-dark { display:block; } }
+.m-brand-lockup.m-brand-dark { display:none; } html[data-mobile-theme="dark"] .m-brand-lockup.m-brand-dark { display:block; } @media(prefers-color-scheme:dark) { html[data-mobile-theme="system"] .m-brand-lockup.m-brand-dark { display:block; } }

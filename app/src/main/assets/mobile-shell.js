@@ -36,8 +36,8 @@
   function header() {
     const account=snapshot?.accounts?.find(a=>String(a.ACCOUNTID)===String(state.account));
     const detail=state.detail!==null;
-    $('#m-header').innerHTML=`${detail||state.tool ? button('back','Back','back') : `<span class="m-monogram" aria-label="DIWAN">D<span></span></span>`}
-      <div class="m-heading"><h1>${escape(detail?'Transaction':state.tool?state.tool.label:labels[state.route])}</h1><button class="m-file-name" data-action="files">${escape(snapshot?.loaded?snapshot.fileName:'DIWAN · Your money, on your device')}${snapshot?.loaded?icon('down'):''}</button></div>
+    $('#m-header').innerHTML=`${detail||state.tool ? button('back','Back','back') : `<span class="m-monogram"><img class="m-brand-symbol m-brand-light" src="brand/diwanledger-symbol-petrol.svg" alt="Diwan Ledger"><img class="m-brand-symbol m-brand-dark" src="brand/diwanledger-symbol-ivory.svg" alt="Diwan Ledger"></span>`}
+      <div class="m-heading"><h1>${escape(detail?'Transaction':state.tool?state.tool.label:labels[state.route])}</h1><button class="m-file-name" data-action="files">${escape(snapshot?.loaded?snapshot.fileName:'Diwan Ledger · Your money, on your device')}${snapshot?.loaded?icon('down'):''}</button></div>
       ${snapshot?.loaded?button('save',snapshot.dirty?'Save unsaved changes':'Save file','save',`data-unsaved="${!!snapshot.dirty}"`):''}
       ${snapshot?.loaded&&!detail&&!state.tool?button(state.route==='activity'?'search':'files',state.route==='activity'?'Search transactions':'File actions',state.route==='activity'?'search':'more'):''}`;
     $('#m-nav').hidden=!snapshot?.loaded;
@@ -111,7 +111,7 @@
       <div class="m-detail-actions"><button class="m-outline" data-action="duplicate">${icon('copy')} Duplicate</button><button class="m-filled" data-action="edit">${icon('edit')} Edit transaction</button></div>`;
   }
   function welcome() {
-    return `<section class="m-welcome"><div class="m-welcome-brand">${icon('accounts')}<strong>DIWAN<span lang="ar">ديوان</span></strong></div><h2>A clear view of<br>your everyday money.</h2><p>Keep your accounts together. Record an expense in a few taps. Pick up where your file left off.</p><div class="m-welcome-actions"><button class="m-filled" data-action="open">${icon('folder')} Open finance file</button><button class="m-outline" data-action="folder">Choose working folder</button></div><p class="m-welcome-support">Opens .diwan and .mmb files</p><div class="m-welcome-note">${icon('shield')}<p><strong>Your file. Your device.</strong><br>No account or server is needed. Choose a folder to save changes and keep preferences beside your file.</p></div><p id="m-loading" class="m-muted" role="status">Preparing your workspace…</p></section>`;
+    return `<section class="m-welcome"><div class="m-welcome-brand"><img class="m-brand-lockup m-brand-light" src="brand/diwanledger-logo-stacked-petrol.svg" alt="Diwan Ledger"><img class="m-brand-lockup m-brand-dark" src="brand/diwanledger-logo-stacked-ivory.svg" alt="Diwan Ledger"></div><h2>A clear view of<br>your everyday money.</h2><p>Keep your accounts together. Record an expense in a few taps. Pick up where your file left off.</p><div class="m-welcome-actions"><button class="m-filled" data-action="open">${icon('folder')} Open finance file</button><button class="m-outline" data-action="folder">Choose working folder</button></div><p class="m-welcome-support">Opens .diwan and .mmb files</p><div class="m-welcome-note">${icon('shield')}<p><strong>Your file. Your device.</strong><br>No account or server is needed. Choose a folder to save changes and keep preferences beside your file.</p></div><p id="m-loading" class="m-muted" role="status">Preparing your workspace…</p></section>`;
   }
   function showTool(id) {
     const found=tools.find(t=>t[0]===id)||['budget','Budget setup'];
