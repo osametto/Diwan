@@ -1,4 +1,4 @@
-name: Build signed Android APK
+name: Build Android preview APK
 on:
   workflow_dispatch:
   push:
@@ -29,30 +29,28 @@ jobs:
           CHROMIUM_CHANNEL: chromium
           DIWAN_CAPTURE: '0'
         run: |
-          python3 tools/wrap_studio.py Diwan-1.2.12.html
+          if [ -f "Diwan-1.2.12.html" ]; then
+            python3 tools/wrap_studio.py Diwan-1.2.12.html
+          else
+            echo "Original HTML is absent; verifying the committed prepared Android assets instead."
+            for asset in index.html android-bridge.js mobile-shell.js mobile-shell.css; do
+              if [ ! -s "app/src/main/assets/$asset" ]; then
+                echo "::error::Missing app/src/main/assets/$asset. Upload the complete GitHub source ZIP contents, including app, tools, package files and .github."
+                exit 1
+              fi
+            done
+          fi
           npm ci
           npx playwright install --with-deps chromium
           npm test
-      - name: Restore permanent signing key
+      - name: Compile debug preview (no secrets required)
         env:
-          KEYSTORE_BASE64: ${{ secrets.STUDIO_KEYSTORE_BASE64 }}
-        run: |
-          test -n "$KEYSTORE_BASE64" || { echo 'Add the STUDIO signing secrets from your private signing kit.'; exit 1; }
-          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/studio-release.jks"
-      - name: Compile and sign
-        env:
-          STUDIO_KEYSTORE: ${{ runner.temp }}/studio-release.jks
-          STUDIO_STORE_PASSWORD: ${{ secrets.STUDIO_STORE_PASSWORD }}
-          STUDIO_KEY_PASSWORD: ${{ secrets.STUDIO_KEY_PASSWORD }}
           STUDIO_VERSION_CODE: ${{ github.run_number }}
         run: |
           export STUDIO_VERSION_CODE=$((120200 + STUDIO_VERSION_CODE))
-          gradle --no-daemon --max-workers=2 assembleRelease lintRelease
+          gradle --no-daemon --max-workers=2 assembleDebug lintDebug
       - uses: actions/upload-artifact@v4
         with:
-          name: DIWAN-Android-APK
-          path: app/build/outputs/apk/release/app-release.apk
+          name: DIWAN-Android-Debug-APK
+          path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
-      - name: Remove temporary signing key
-        if: always()
-        run: rm -f "$RUNNER_TEMP/studio-release.jks"
